@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="mr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KC97 Academy - MPSC & Civil Engineering Daily Mock Tests</title>
+  <style>
+    :root {
+      --primary: #1e3a8a;
+      --primary-dark: #172554;
+      --bg: #f8fafc;
+      --card: #ffffff;
+      --text: #1f2937;
+      --accent: #2563eb;
+      --border: #e2e8f0;
+    }
+    * { box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      margin: 0;
+      padding: 20px;
+    }
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+    .header {
+      text-align: center;
+      margin-bottom: 40px;
+      background: var(--primary);
+      color: white;
+      padding: 30px 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+    .header h1 { margin: 0 0 10px 0; font-size: 2.2rem; }
+    .header p { margin: 0; font-size: 1.1rem; opacity: 0.9; }
+    
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 25px;
+    }
+    .subject-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+      transition: transform 0.2s;
+    }
+    .subject-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
+    }
+    .subject-title {
+      font-size: 1.3rem;
+      font-weight: bold;
+      color: var(--primary);
+      border-bottom: 2px solid var(--accent);
+      padding-bottom: 10px;
+      margin-bottom: 15px;
+    }
+    .test-links-container {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      max-height: 250px;
+      overflow-y: auto;
+      padding-right: 5px;
+    }
+    .test-links-container::-webkit-scrollbar { width: 6px; }
+    .test-links-container::-webkit-scrollbar-thumb { background-color: #cbd5e1; border-radius: 10px; }
+    
+    .test-link {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #f1f5f9;
+      padding: 12px 15px;
+      border-radius: 6px;
+      text-decoration: none;
+      color: var(--text);
+      font-weight: 500;
+      transition: background 0.2s;
+      border: 1px solid transparent;
+    }
+    .test-link:hover {
+      background: #e0e7ff;
+      border-color: #c7d2fe;
+      color: var(--primary-dark);
+    }
+    .test-status {
+      font-size: 0.75rem;
+      background: var(--success, #16a34a);
+      color: white;
+      padding: 3px 8px;
+      border-radius: 12px;
+      font-weight: bold;
+    }
+    .new-badge { background: #dc2626; }
+    .loading-text { color: #64748b; font-size: 0.9rem; text-align: center; padding: 10px; font-style: italic; }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <div class="header">
+    <h1>KC97 Academy</h1>
+    <p>MPSC, Civil Engineering & Competitive Exams - Daily Mock Tests</p>
+  </div>
+
+  <div class="dashboard-grid" id="dashboard-grid">
+    <!-- Cards will be automatically generated here -->
+  </div>
+</div>
+
+<script>
+  // १. तुमच्या विषयांच्या फोल्डर्सची नावे
+  const testSections = [
+    { folder: "marathi", title: "मराठी व्याकरण व साहित्य (Marathi)" },
+    { folder: "english", title: "English Grammar" },
+    { folder: "gk-gs", title: "सामान्य ज्ञान (GK & GS)" },
+    { folder: "maths-reasoning", title: "Maths & Reasoning" },
+    { folder: "civil-engineering", title: "Civil Engineering" }
+  ];
+
+  const dashboardGrid = document.getElementById("dashboard-grid");
+  const cardElements = {};
+
+  // २. सुरुवातीला सर्व विषयांचे कार्ड्स बनवणे (Loading State मध्ये)
+  testSections.forEach(section => {
+    const card = document.createElement("div");
+    card.className = "subject-card";
+    
+    const title = document.createElement("div");
+    title.className = "subject-title";
+    title.innerText = section.title;
+    card.appendChild(title);
+
+    const linksContainer = document.createElement("div");
+    linksContainer.className = "test-links-container";
+    linksContainer.innerHTML = `<div class="loading-text">टेस्ट्स शोधत आहे... (Auto-detecting)</div>`;
+    
+    card.appendChild(linksContainer);
+    dashboardGrid.appendChild(card);
+    
+    // नंतर लिंक्स टाकण्यासाठी कंटेनर स्टोअर करणे
+    cardElements[section.folder] = linksContainer;
+  });
+
+  // ३. आपोआप फाईल्स शोधणे (Auto-Detect Logic)
+  // ही स्क्रिप्ट Netlify वरील फोल्डरमध्ये जाऊन mcq1.html, mcq2.html शोधेल.
+  Promise.all(testSections.map(async (section) => {
+    let count = 0;
+    let checking = true;
+    
+    while (checking) {
+      let testNum = count + 1;
+      try {
+        // फाईल अस्तित्वात आहे का ते चेक करणे (HEAD Request)
+        let response = await fetch(`/${section.folder}/mcq${testNum}.html`, { method: 'HEAD' });
+        
+        if (response.ok) {
+          count++; // फाईल सापडली, पुढची फाईल चेक करा
+        } else {
+          checking = false; // फाईल सापडली नाही, लूप थांबवा
+        }
+      } catch (error) {
+        checking = false;
+      }
+    }
+    
+    // ४. जेवढ्या टेस्ट सापडल्या त्याप्रमाणे बटणे/लिंक्स तयार करणे
+    const container = cardElements[section.folder];
+    container.innerHTML = ""; // लोडिंग टेक्स्ट हटवणे
+    
+    if (count === 0) {
+       container.innerHTML = `<div class="loading-text">सध्या कोणतीही टेस्ट उपलब्ध नाही.</div>`;
+    } else {
+       // सर्वात नवीन टेस्ट (Maximum Number) सर्वात वर दिसण्यासाठी उलट्या क्रमाने (Reverse loop)
+       for (let i = count; i >= 1; i--) {
+         const link = document.createElement("a");
+         link.href = `/${section.folder}/mcq${i}`; // Netlify मुळे .html लावण्याची गरज नाही
+         link.className = "test-link";
+         link.target = "_blank"; 
+         
+         const isNew = (i === count); // सर्वात मोठी संख्या म्हणजेच 'NEW' टेस्ट
+         
+         link.innerHTML = `
+           <span>MCQ ${i}: Mock Test</span>
+           <span class="test-status ${isNew ? 'new-badge' : ''}">${isNew ? 'NEW' : 'Active'}</span>
+         `;
+         
+         container.appendChild(link);
+       }
+    }
+  }));
+</script>
+
+</body>
+</html>
