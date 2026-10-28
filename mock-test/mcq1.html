@@ -127,7 +127,7 @@
   <div id="section-registration" class="app-section active-section">
     <div class="rules-banner">
       <strong>परीक्षेचे नियम:</strong><br>
-      • हा फॉर्म भरण्यासाठी <strong>५ मिनिटे</strong> आहेत. वेळ संपल्यास आपोआप परीक्षा सुरू होईल.<br>
+      • हा फॉर्म भरण्यासाठी <strong>५ मिनिटे</strong> आहेत. वेळ संपल्यास परीक्षा आपोआप सबमिट होईल (० गुण).<br>
       • परीक्षा ४ गटात (A, B, C, D) विभागली आहे. प्रत्येक गटासाठी <strong>३० मिनिटे</strong> वेळ असेल.
     </div>
 
@@ -139,8 +139,8 @@
         <label for="paper_type">पेपरचा प्रकार निवडा (Paper Pattern) *</label>
         <select id="paper_type" required>
           <option value="GENERAL">General Paper (100 Questions - No Technical)</option>
-          <option value="TECH_60_40">Civil Engineering Paper (60 Technical / 40 General)</option>
-          <option value="TECH_40_60">Civil Engineering Paper (40 Technical / 60 General)</option>
+          <option value="TECH_60_40">Technical Paper (60 Technical / 40 General)</option>
+          <option value="TECH_40_60">Technical Paper (40 Technical / 60 General)</option>
         </select>
       </div>
 
@@ -230,7 +230,7 @@
 
       <!-- Subject-wise Marks Summary -->
       <div style="margin-top: 30px;">
-        <h3 style="color: var(--primary); border-bottom: 2px solid var(--accent); padding-bottom: 5px; margin-bottom: 15px;">विषय निहाय विश्लेषण (Subject-wise Analysis)</h3>
+        <h3 style="color: var(--primary); border-bottom: 2px solid var(--accent); padding-bottom: 5px; margin-bottom: 15px;">विषयनिहाय विश्लेषण (Subject-wise Analysis)</h3>
         <table class="marks-table">
           <thead>
             <tr>
@@ -341,8 +341,8 @@ consentCheckbox.addEventListener("change", function() {
 window.onload = () => {
   // Start 5 min timer for Registration
   startTimer(TIME_REGISTRATION * 60, "नोंदणीसाठी वेळ (Reg Time)", () => {
-    alert("नोंदणीची वेळ संपली आहे. परीक्षा आपोआप सुरू होत आहे.");
-    forceSubmitRegistration();
+    alert("नोंदणीची वेळ संपली आहे. परीक्षा आपोआप सबमिट केली जात आहे (० गुण).");
+    autoSubmitUnattemptedExam();
   });
 };
 
@@ -376,15 +376,27 @@ document.getElementById("reg-form").addEventListener("submit", function(e) {
   startExamSequence();
 });
 
-function forceSubmitRegistration() {
+function autoSubmitUnattemptedExam() {
   studentInfo = { 
-    name: document.getElementById("u_name").value || "Auto-Submitted", 
+    name: document.getElementById("u_name").value || "Time-Out (No Name)", 
     phone: document.getElementById("u_phone").value || "0000000000", 
-    email: document.getElementById("u_email").value || "auto@kc97.com", 
+    email: document.getElementById("u_email").value || "timeout@kc97.com", 
     location: document.getElementById("u_location").value || "Unknown",
     paperType: document.getElementById("paper_type").value
   };
-  startExamSequence();
+  
+  // Set all 100 questions as unattempted based on matrix
+  finalScores.unattempted = 100;
+  const matrix = MATRICES[studentInfo.paperType];
+  for(let g=0; g<4; g++) {
+    subjectScores["मराठी"].unattempted += matrix[g][0];
+    subjectScores["English"].unattempted += matrix[g][1];
+    subjectScores["GK"].unattempted += matrix[g][2];
+    subjectScores["Maths & Reasoning"].unattempted += matrix[g][3];
+    subjectScores["Technical"].unattempted += matrix[g][4];
+  }
+  
+  processFinalResult();
 }
 
 // ========================================================
@@ -415,14 +427,11 @@ function startExamSequence() {
 
   const matrix = MATRICES[studentInfo.paperType];
   
-  // =========================================================
-  // LOGIC: Ensure Marathi and English paragraphs NEVER end up in the SAME group
-  // and we take exactly ONE paragraph for Marathi and ONE for English for the whole exam.
-  // =========================================================
+  // Decide randomly which group gets the paragraph ensuring they are NOT in the same group
   let availableGroups = [0, 1, 2, 3];
   availableGroups = shuffle(availableGroups);
-  let marathiParaGroup = availableGroups[0]; // e.g., Group 2 (C)
-  let englishParaGroup = availableGroups[1]; // e.g., Group 0 (A) - Never the same as Marathi!
+  let marathiParaGroup = availableGroups[0]; 
+  let englishParaGroup = availableGroups[1]; 
 
   for(let g=0; g<4; g++) {
     generatedPaper[g] = [];
@@ -530,7 +539,7 @@ function loadGroupUI(gIndex) {
 function createQHTML(qObj, num, subject, gIndex) {
   let div = document.createElement("div");
   div.className = "question-block";
-  div.setAttribute("data-subject", subject); // Data attribute for calculating subject scores
+  div.setAttribute("data-subject", subject); 
   
   // Create unique name to store value and prevent overlapping across groups
   let inputName = `grp${gIndex}_q${num}`;
@@ -547,9 +556,9 @@ function createQHTML(qObj, num, subject, gIndex) {
 }
 
 // ========================================================
-// 8. SCORING & FINAL SUBMISSION
+// 8. SCORING & FINAL SUBMISSION (FAST UI UPDATE)
 // ========================================================
-async function submitCurrentGroup(isAutoSubmit) {
+function submitCurrentGroup(isAutoSubmit) {
   if (!isAutoSubmit) {
     if (!confirm("तुम्हाला खात्री आहे का की हा गट सबमिट करायचा आहे? तुम्ही मागे येऊ शकणार नाही.")) return;
   }
@@ -580,20 +589,21 @@ async function submitCurrentGroup(isAutoSubmit) {
 
   currentGroupIndex++;
   if (currentGroupIndex > 3) {
-    await processFinalResult();
+    processFinalResult(); 
   } else {
     loadGroupUI(currentGroupIndex);
   }
 }
 
-async function processFinalResult() {
+function processFinalResult() {
   clearInterval(timerInterval);
   document.getElementById("timer-container").style.display = "none";
+  document.getElementById("section-registration").classList.remove("active-section");
   document.getElementById("section-exam").classList.remove("active-section");
   
   const penalty = finalScores.wrong * 0.25;
   const netScore = (finalScores.correct * 1.0) - penalty;
-  const percentage = netScore.toFixed(2); // Since total is 100
+  const percentage = netScore.toFixed(2); 
 
   // 1. Prepare Google Sheet Payload
   const payload = {
@@ -613,13 +623,11 @@ async function processFinalResult() {
     consent: "Yes"
   };
 
-  // 2. Send to Google Sheets
+  // 2. Send to Google Sheets IN THE BACKGROUND (No UI Freezing)
   if (GOOGLE_SHEET_WEBAPP_URL !== "") {
-    try {
-      await fetch(GOOGLE_SHEET_WEBAPP_URL, {
-        method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify(payload)
-      });
-    } catch (err) { console.error("Sheet error: ", err); }
+    fetch(GOOGLE_SHEET_WEBAPP_URL, {
+      method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify(payload)
+    }).catch(err => console.error("Sheet error: ", err));
   }
 
   // 3. Show Final Scorecard
@@ -645,7 +653,7 @@ async function processFinalResult() {
   for(let subj in subjectScores) {
     let scores = subjectScores[subj];
     let totalQs = scores.correct + scores.wrong + scores.unattempted;
-    // Only show subjects that actually had questions (e.g. hides Technical for General paper)
+    
     if(totalQs > 0) {
       subjectHtml += `
         <tr>
