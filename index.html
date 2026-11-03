@@ -105,6 +105,11 @@
     }
     .new-badge { background: #dc2626; }
     .loading-text { color: #64748b; font-size: 0.9rem; text-align: center; padding: 10px; font-style: italic; }
+    
+    /* Footer styles */
+    footer { text-align: center; padding: 20px; margin-top: 40px; border-top: 1px solid #cbd5e1; font-size: 0.9rem; }
+    footer a { color: var(--accent); text-decoration: none; margin: 0 10px; font-weight: 500; }
+    footer a:hover { text-decoration: underline; }
   </style>
 </head>
 <body>
@@ -119,6 +124,15 @@
     <!-- Cards will be automatically generated here -->
   </div>
 </div>
+
+<!-- FOOTER WITH POLICY LINKS (Mandatory for AdSense) - Moved outside the script block -->
+<footer>
+  <p>&copy; 2026 KC97org Academy. All Rights Reserved.</p>
+  <a href="/about.html">About Us</a> |
+  <a href="/privacy-policy.html">Privacy Policy</a> |
+  <a href="/terms.html">Terms & Conditions</a> |
+  <a href="/contact.html">Contact Us</a>
+</footer>
 
 <script>
   // १. तुमच्या विषयांच्या फोल्डर्सची नावे
@@ -201,16 +215,6 @@
          container.appendChild(link);
        }
     }
-
-      <!-- FOOTER WITH POLICY LINKS (Mandatory for AdSense) -->
-  <footer>
-    <p>&copy; 2026 KC97org Academy. All Rights Reserved.</p>
-    <a href="/about.html">About Us</a> |
-    <a href="/privacy-policy.html">Privacy Policy</a> |
-    <a href="/terms.html">Terms & Conditions</a> |
-    <a href="/contact.html">Contact Us</a>
-  </footer>
-  
   }));
 
 </script>
