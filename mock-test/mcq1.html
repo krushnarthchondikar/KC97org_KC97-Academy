@@ -5,84 +5,78 @@
      crossorigin="anonymous"></script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>सराव चाचणी (Mock Test) - स्पर्धा परीक्षा</title>
+  <title>दैनिक सराव चाचणी (Advanced Dynamic Mock Test) - MPSC / स्पर्धा परीक्षा</title>
   <style>
     :root {
-      --primary: #1e3a8a;
-      --primary-dark: #172554;
-      --bg: #f8fafc;
-      --card: #ffffff;
-      --text: #1f2937;
-      --border: #cbd5e1;
-      --accent: #2563eb;
-      --danger: #dc2626;
-      --success: #16a34a;
-      --youtube: #ff0000;
+      --primary: #1e3a8a; --primary-dark: #172554; --bg: #f8fafc;
+      --card: #ffffff; --text: #1f2937; --border: #cbd5e1;
+      --accent: #2563eb; --danger: #dc2626; --success: #16a34a; --youtube: #ff0000;
+      --timer-bg: #fef2f2; --timer-text: #991b1b;
     }
     * { box-sizing: border-box; }
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      background-color: var(--bg);
-      color: var(--text);
-      line-height: 1.6;
-      margin: 0;
-      padding: 20px 10px;
-      display: flex;
-      flex-direction: column;
-      min-height: 100vh;
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background-color: var(--bg); color: var(--text); line-height: 1.6; margin: 0; padding: 20px 10px; display: flex; flex-direction: column; min-height: 100vh; }
+    .container { max-width: 820px; margin: 0 auto; background: var(--card); padding: 30px; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); position: relative; flex-grow: 1; width: 100%; }
+    
+    /* Blue Header Styles */
+    .main-header {
+      background: var(--primary);
+      color: white;
+      text-align: center;
+      padding: 25px 20px;
+      border-radius: 10px;
+      margin-bottom: 25px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
     }
-    .container {
-      max-width: 820px;
-      margin: 0 auto;
-      background: var(--card);
-      padding: 30px;
-      border-radius: 12px;
-      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-      flex-grow: 1;
-      width: 100%;
-    }
-    h1 { color: var(--primary); text-align: center; margin-bottom: 4px; }
-    .date-badge { display: block; text-align: center; font-weight: 600; color: var(--accent); margin-bottom: 16px; }
-    .rules-banner { background-color: #eff6ff; border-left: 4px solid var(--accent); padding: 12px 16px; margin-bottom: 24px; font-size: 0.95rem; border-radius: 4px; }
+    .main-header h1 { color: white; margin: 0 0 8px 0; font-size: 2.2rem; }
+    .main-header .date-badge { color: #e0e7ff; font-weight: 600; font-size: 1.1rem; margin: 0; }
 
-    .ad-container {
-      background-color: #f1f5f9; border: 1px dashed #94a3b8; border-radius: 8px; text-align: center;
-      padding: 15px; margin: 20px 0; min-height: 120px; display: flex; flex-direction: column; align-items: center; justify-content: center;
+    /* Timer Sticky Header */
+    #timer-container {
+      position: sticky; top: 0; background: var(--timer-bg); color: var(--timer-text);
+      padding: 12px; text-align: center; font-size: 1.4rem; font-weight: bold;
+      border-bottom: 3px solid var(--danger); z-index: 100; display: none; 
+      border-radius: 8px 8px 0 0; margin: -30px -30px 20px -30px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
     }
+    
+    .rules-banner { background-color: #eff6ff; border-left: 4px solid var(--accent); padding: 12px 16px; margin-bottom: 24px; font-size: 0.95rem; border-radius: 4px; }
+    
+    /* ADVERTISEMENT STYLES */
+    .ad-container { background-color: #f1f5f9; border: 1px dashed #94a3b8; border-radius: 8px; text-align: center; padding: 15px; margin: 20px 0; min-height: 120px; display: flex; flex-direction: column; align-items: center; justify-content: center; }
     .ad-label { font-size: 0.75rem; color: #64748b; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px; }
 
     .section-title { font-size: 1.1rem; font-weight: bold; color: var(--primary); margin-bottom: 12px; border-bottom: 2px solid #e2e8f0; padding-bottom: 4px; }
     .user-info-grid { display: grid; grid-template-columns: 1fr; gap: 15px; margin-bottom: 20px; background: #f1f5f9; padding: 16px; border-radius: 8px; }
     @media (min-width: 600px) { .user-info-grid { grid-template-columns: 1fr 1fr; } .user-info-grid .full-width { grid-column: span 2; } }
+    
     .form-group { display: flex; flex-direction: column; }
     .form-group label { font-weight: 600; font-size: 0.9rem; margin-bottom: 4px; }
-    .form-group input { padding: 10px 12px; border: 1px solid var(--border); border-radius: 6px; font-size: 1rem; outline: none; }
-    .form-group input:focus { border-color: var(--accent); box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2); }
+    .form-group input, .form-group select { padding: 10px 12px; border: 1px solid var(--border); border-radius: 6px; font-size: 1rem; outline: none; }
+    .form-group input:focus, .form-group select:focus { border-color: var(--accent); box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2); }
     .error-msg { color: var(--danger); font-size: 0.8rem; margin-top: 3px; display: none; }
-
+    
     .consent-container { background-color: #fffbeb; border: 1px solid #fef3c7; padding: 12px 16px; border-radius: 8px; margin-bottom: 15px; display: flex; align-items: flex-start; gap: 10px; }
     .consent-container input[type="checkbox"] { width: 18px; height: 18px; margin-top: 3px; cursor: pointer; }
     .consent-container label { font-size: 0.92rem; color: #92400e; cursor: pointer; line-height: 1.4; }
-
-    .question-block { border: 1px solid var(--border); border-radius: 8px; padding: 18px; margin-bottom: 16px; background-color: #ffffff; display: none; }
+    
+    /* Sections visibility */
+    .app-section { display: none; }
+    .active-section { display: block; }
+    
+    /* Exam Styles */
+    .group-header { background: #e0e7ff; color: #3730a3; padding: 12px; border-radius: 8px; text-align: center; font-weight: bold; font-size: 1.2rem; margin-bottom: 20px; border: 1px solid #c7d2fe; }
+    .question-block { border: 1px solid var(--border); border-radius: 8px; padding: 18px; margin-bottom: 16px; background-color: #ffffff; }
+    .para-container { background: #fef9c3; border-left: 5px solid #ca8a04; padding: 15px; border-radius: 4px; margin-bottom: 15px; font-style: italic; color: #854d0e; }
     .q-title { font-weight: 600; margin-bottom: 10px; }
     .options label { display: flex; align-items: center; padding: 8px 12px; margin-bottom: 6px; border: 1px solid #e2e8f0; border-radius: 6px; cursor: pointer; transition: background 0.2s; }
     .options label:hover { background-color: #f8fafc; }
     .options input { margin-right: 12px; }
-    .badge { display: inline-block; padding: 3px 8px; border-radius: 4px; font-size: 0.8rem; background: #e0e7ff; color: #3730a3; margin-bottom: 6px; }
+    .badge-subject { display: inline-block; padding: 3px 8px; border-radius: 4px; font-size: 0.75rem; background: var(--primary); color: #fff; margin-bottom: 8px; }
 
-    /* Pagination Controls */
-    .pagination-controls { display: flex; justify-content: space-between; align-items: center; margin-top: 20px; padding-top: 15px; border-top: 1px solid var(--border); }
-    .page-info { font-weight: bold; color: var(--primary); }
-    .btn-page { background: #64748b; color: #fff; padding: 10px 18px; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; }
-    .btn-page:hover:not(:disabled) { background: #475569; }
-    .btn-page:disabled { background: #cbd5e1; cursor: not-allowed; }
-
-    .btn-submit { display: none; background: var(--primary); color: #fff; font-size: 1.1rem; font-weight: bold; padding: 12px 20px; border: none; border-radius: 6px; cursor: pointer; }
+    .btn-submit { display: block; width: 100%; background: var(--primary); color: #fff; font-size: 1.1rem; font-weight: bold; padding: 14px 20px; border: none; border-radius: 6px; cursor: pointer; margin-top: 20px; }
     .btn-submit:disabled { background: #94a3b8; cursor: not-allowed; }
     .btn-submit:hover:not(:disabled) { background: var(--primary-dark); }
-
-    #score-card { display: none; border-radius: 10px; border: 2px solid var(--accent); background: #ffffff; padding: 24px; margin-top: 20px; }
+    
+    #score-card { border-radius: 10px; border: 2px solid var(--accent); background: #ffffff; padding: 24px; margin-top: 20px; }
     .card-header { text-align: center; border-bottom: 2px dashed #cbd5e1; padding-bottom: 15px; margin-bottom: 15px; }
     .card-header h2 { margin: 0; color: var(--primary); }
     .student-details { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; background: #f8fafc; padding: 12px; border-radius: 6px; font-size: 0.95rem; margin-bottom: 15px; }
@@ -91,12 +85,14 @@
     .marks-table th { background: #f1f5f9; }
     .final-score-box { text-align: center; padding: 15px; border-radius: 8px; background: #f0fdf4; border: 1px solid #86efac; }
     .final-score-box .score { font-size: 2.2rem; font-weight: bold; color: var(--success); }
+    
     #loading-indicator { display: none; text-align: center; padding: 15px; color: var(--primary); font-weight: 600; }
-    #solution-video-container { display: none; text-align: center; margin-top: 25px; padding-top: 20px; border-top: 2px dashed #cbd5e1; }
+    
+    #solution-video-container { text-align: center; margin-top: 25px; padding-top: 20px; border-top: 2px dashed #cbd5e1; }
     .btn-youtube { display: inline-flex; align-items: center; gap: 8px; background: var(--youtube); color: #fff; padding: 10px 20px; border-radius: 6px; text-decoration: none; font-weight: bold; margin-bottom: 15px; transition: 0.2s; }
     .btn-youtube:hover { background: #cc0000; }
 
-    /* Footer styles */
+    /* Footer Styles */
     footer { text-align: center; padding: 20px; margin-top: 40px; border-top: 1px solid #cbd5e1; font-size: 0.9rem; width: 100%; background: var(--bg); }
     footer a { color: var(--accent); text-decoration: none; margin: 0 10px; font-weight: 500; }
     footer a:hover { text-decoration: underline; }
@@ -105,120 +101,168 @@
 <body>
 
 <div class="container">
-  <h1 id="quiz-heading">महाराष्ट्रातील वृत्तपत्रे - सराव टेस्ट</h1>
-  <div class="date-badge" id="display-date"></div>
+  
+  <!-- STICKY TIMER -->
+  <div id="timer-container">
+    <span id="timer-label">वेळ शिल्लक:</span> <span id="time-display">00:00</span>
+  </div>
 
-  <!-- AD SECTION 1
+  <!-- BLUE HEADER SECTION -->
+  <div class="main-header">
+    <h1 id="quiz-heading">KC97org KC97 Academy</h1>
+    <div class="date-badge" id="display-date"></div>
+  </div>
+
+  <!-- AD SECTION 1 (TOP) 
   <div class="ad-container">
     <div class="ad-label">Advertisement</div>
     <div style="color: #94a3b8;">(Top Ad Space / 728x90)</div>
   </div> -->
 
-  <div class="rules-banner">
-    <strong>परीक्षेचे नियम व गुणदान पद्धत:</strong><br>
-    • बरोबर उत्तर: <strong>+1.00 गुण</strong> | चुकीचे उत्तर: <strong>-0.25 (1/4 निगेटिव्ह)</strong> | अनुत्तरित: <strong>0 गुण</strong><br>
-    • प्रत्येक विद्यार्थ्याला आजच्या चाचणीसाठी फक्त <strong>एकच वेळ</strong> सबमिट करता येईल.
-  </div>
-
-  <div id="already-submitted" style="display:none; text-align:center; padding: 25px; color: var(--danger); font-weight: bold; background: #fef2f2; border: 1px solid #fecaca; border-radius: 8px;">
-    तुम्ही आजची चाचणी आधीच सोडवली आहे! पुढील नवीन प्रश्न उद्या सकाळी उपलब्ध होतील.
-  </div>
-
-  <form id="quiz-form" novalidate>
-    <!-- STUDENT REGISTRATION -->
-    <div class="section-title">विद्यार्थ्याची माहिती</div>
-    <div class="user-info-grid">
-      <div class="form-group full-width">
-        <label for="u_name">पूर्ण नाव *</label>
-        <input type="text" id="u_name" placeholder="उदा. कृष्णार्थ कुलकर्णी" required>
-        <span class="error-msg" id="err_name">कृपया वैध नाव प्रविष्ट करा.</span>
-      </div>
-      <div class="form-group">
-        <label for="u_phone">मोबाईल क्रमांक *</label>
-        <input type="tel" id="u_phone" placeholder="उदा. ९५९५५९९४८२" maxlength="10" required>
-        <span class="error-msg" id="err_phone">कृपया वैध 10-अंकी मोबाईल नंबर प्रविष्ट करा.</span>
-      </div>
-      <div class="form-group">
-        <label for="u_email">ईमेल आयडी *</label>
-        <input type="email" id="u_email" placeholder="उदा. kc97services@gmail.com" required>
-        <span class="error-msg" id="err_email">कृपया वैध ईमेल आयडी प्रविष्ट करा.</span>
-      </div>
-      <!-- ठिकाण Field Corrected -->
-      <div class="form-group">
-        <label for="u_location">ठिकाण *</label>
-        <input type="text" id="u_location" placeholder="उदा. छत्रपती संभाजीनगर" required>
-        <span class="error-msg" id="err_location">कृपया वैध ठिकाण प्रविष्ट करा.</span>
-      </div>
+  <!-- ======================================= -->
+  <!-- SECTION 1: REGISTRATION (5 MIN TIMER) -->
+  <!-- ======================================= -->
+  <div id="section-registration" class="app-section active-section">
+    <div class="rules-banner">
+      <strong>परीक्षेचे नियम:</strong><br>
+      • हा फॉर्म भरण्यासाठी <strong>५ मिनिटे</strong> आहेत. वेळ संपल्यास परीक्षा आपोआप सबमिट होईल (० गुण).<br>
+      • परीक्षा ४ गटात (A, B, C, D) विभागली आहे. प्रत्येक गटासाठी <strong>३० मिनिटे</strong> वेळ असेल.
     </div>
 
-    <!-- CONSENT CHECKBOX -->
-    <div class="consent-container">
-      <input type="checkbox" id="consent_checkbox">
-      <label for="consent_checkbox">
-        मी याद्वारे संमती देतो/देते की माझी संपूर्ण माहिती व चाचणी गुण निकाल गुणवत्ता आणि संकलनासाठी नोंदवले जाऊ शकतात.*
-      </label>
-    </div>
-    <span class="error-msg" id="err_consent" style="margin-top: -15px; margin-bottom: 15px; display: none;">चाचणी सबमिट करण्यासाठी संमती देणे अनिवार्य आहे.</span>
+    <form id="reg-form" novalidate>
+      <div class="section-title">विद्यार्थ्याची माहिती (Registration)</div>
+      
+      <!-- PAPER SELECTION -->
+      <div class="form-group" style="margin-bottom: 15px;">
+        <label for="paper_type">पेपरचा प्रकार निवडा (Paper Pattern) *</label>
+        <select id="paper_type" required>
+          <option value="GENERAL">General Paper (100 Questions - No Technical)</option>
+          <option value="TECH_60_40">Civil Enginnering Paper (60 Technical / 40 General)</option>
+          <option value="TECH_40_60">Civil Enginnering Paper (40 Technical / 60 General)</option>
+        </select>
+      </div>
 
-    <!-- AD SECTION 2 
-    <div class="ad-container">
-      <div class="ad-label">Advertisement</div>
-      <div style="color: #94a3b8;">(Middle Ad Space)</div>
-    </div> -->
+      <div class="user-info-grid">
+        <div class="form-group full-width">
+          <label for="u_name">पूर्ण नाव *</label>
+          <input type="text" id="u_name" placeholder="उदा. कृष्णार्थ शशिकांत कुलकर्णी" required>
+          <span class="error-msg" id="err_name">कृपया वैध नाव प्रविष्ट करा.</span>
+        </div>
+        <div class="form-group">
+          <label for="u_phone">मोबाईल क्रमांक *</label>
+          <input type="tel" id="u_phone" placeholder="उदा. 9876543210" maxlength="10" required>
+          <span class="error-msg" id="err_phone">कृपया वैध 10-अंकी मोबाईल नंबर प्रविष्ट करा.</span>
+        </div>
+        <div class="form-group">
+          <label for="u_email">ईमेल आयडी *</label>
+          <input type="email" id="u_email" placeholder="उदा. kc97services@gmail.com" required>
+          <span class="error-msg" id="err_email">कृपया वैध ईमेल आयडी प्रविष्ट करा.</span>
+        </div>
+        <div class="form-group full-width">
+          <label for="u_location">ठिकाण *</label>
+          <input type="text" id="u_location" placeholder="उदा. छत्रपती संभाजीनगर" required>
+          <span class="error-msg" id="err_location">कृपया वैध ठिकाण प्रविष्ट करा.</span>
+        </div>
+      </div>
 
-    <!-- QUESTIONS -->
-    <div class="section-title" id="question-header-target">आजचे प्रश्न (<span id="total-questions-count">0</span> प्रश्न)</div>
+      <div class="consent-container">
+        <input type="checkbox" id="consent_checkbox">
+        <label for="consent_checkbox">
+          मी याद्वारे संमती देतो/देते की माझी संपूर्ण माहिती व चाचणी गुण निकाल गुणवत्ता आणि संकलनासाठी नोंदवले जाऊ शकतात.*
+        </label>
+      </div>
+      <span class="error-msg" id="err_consent" style="margin-top: -15px; margin-bottom: 15px; display: none;">चाचणी सुरू करण्यासाठी संमती देणे अनिवार्य आहे.</span>
+
+      <!-- AD SECTION 2 (MIDDLE) 
+      <div class="ad-container">
+        <div class="ad-label">Advertisement</div>
+        <div style="color: #94a3b8;">(Middle Ad Space)</div>
+      </div> -->
+
+      <button type="submit" class="btn-submit" id="btn-start-exam" disabled>माहिती सबमिट करा आणि परीक्षा सुरू करा</button>
+    </form>
+  </div>
+
+  <!-- ======================================= -->
+  <!-- SECTION 2: EXAM INTERFACE (GROUPS A,B,C,D) -->
+  <!-- ======================================= -->
+  <div id="section-exam" class="app-section">
+    <div class="group-header" id="current-group-header">Group A (Very Easy Level)</div>
+    
     <div id="questions-container"></div>
-
-    <!-- PAGINATION CONTROLS -->
-    <div class="pagination-controls" id="pagination-controls">
-      <button type="button" class="btn-page" id="btn-prev" onclick="changePage(-1)">◀ मागील</button>
-      <div class="page-info">पेज <span id="current-page-display">1</span> / <span id="total-pages-display">1</span></div>
-      <button type="button" class="btn-page" id="btn-next" onclick="changePage(1)">पुढील ▶</button>
-      <button type="submit" class="btn-submit" id="submit-btn" disabled>सबमिट करा</button>
-    </div>
-
+    
+    <button class="btn-submit" id="btn-next-group" onclick="submitCurrentGroup(false)" style="background: var(--accent);">पुढील गट (Next Section) ▶</button>
     <div id="loading-indicator">माहिती नोंदवत आहे... कृपया थांबा...</div>
-  </form>
+  </div>
 
-  <!-- RESULT SCORECARD -->
-  <div id="score-card">
-    <div class="card-header">
-      <h2>दैनिक चाचणी गुणपत्रिका (Score Card)</h2>
-      <p style="margin: 4px 0 0; color: #64748b;" id="card-date-line"></p>
-      <!-- <button onclick="location.reload()" style="margin-top: 10px; padding: 5px 15px; background: #64748b; color: white; border: none; border-radius: 4px; cursor: pointer;">पुन्हा टेस्ट द्या (Test Again)</button> -->
-    </div>
+  <!-- ======================================= -->
+  <!-- SECTION 3: FINAL SCORECARD -->
+  <!-- ======================================= -->
+  <div id="section-result" class="app-section">
+    <div id="score-card">
+      <div class="card-header">
+        <h2>अंतिम गुणपत्रिका (Final Score Card)</h2>
+        <p style="margin: 4px 0 0; color: #64748b;" id="card-date-line"></p>
+        <!-- <button onclick="location.reload()" style="margin-top: 10px; padding: 5px 15px; background: #64748b; color: white; border: none; border-radius: 4px; cursor: pointer;">पुन्हा टेस्ट द्या (Test Again)</button> -->
+      </div>
 
-    <div class="student-details" id="card-student-details"></div>
+      <div class="student-details" id="card-student-details"></div>
 
-    <table class="marks-table">
-      <thead>
-        <tr><th>तपशील</th><th>संख्या / गुण</th></tr>
-      </thead>
-      <tbody>
-        <tr><td>एकूण प्रश्न संख्या</td><td id="res-total">0</td></tr>
-        <tr><td>बरोबर उत्तरे (+1.00 प्रति प्रश्न)</td><td id="res-correct" style="color: var(--success); font-weight: bold;">0</td></tr>
-        <tr><td>चुकीची उत्तरे (-0.25 प्रति प्रश्न)</td><td id="res-wrong" style="color: var(--danger); font-weight: bold;">0</td></tr>
-        <tr><td>सोडवलेले नाहीत (0 गुण)</td><td id="res-unattempted">0</td></tr>
-        <tr><td>एकूण निगेटिव्ह वजावट</td><td id="res-penalty" style="color: var(--danger); font-weight: bold;">0.00</td></tr>
-      </tbody>
-    </table>
+      <!-- Overall Marks Summary -->
+      <table class="marks-table">
+        <thead><tr><th colspan="2" style="text-align:center; font-size:1.1rem; color:var(--primary);">एकूण निकाल (Overall Summary)</th></tr></thead>
+        <tbody>
+          <tr><td>एकूण प्रश्न संख्या</td><td id="res-total">100</td></tr>
+          <tr><td>बरोबर उत्तरे (+1.00 प्रति प्रश्न)</td><td id="res-correct" style="color: var(--success); font-weight: bold;">0</td></tr>
+          <tr><td>चुकीची उत्तरे (-0.25 प्रति प्रश्न)</td><td id="res-wrong" style="color: var(--danger); font-weight: bold;">0</td></tr>
+          <tr><td>सोडवलेले नाहीत (0 गुण)</td><td id="res-unattempted">0</td></tr>
+          <tr><td>एकूण निगेटिव्ह वजावट</td><td id="res-penalty" style="color: var(--danger); font-weight: bold;">0.00</td></tr>
+        </tbody>
+      </table>
 
-    <div class="final-score-box">
-      <div>अंतिम प्राप्त गुण (Net Score)</div>
-      <div class="score" id="res-final-score">0.00</div>
-      <div id="res-percentage" style="color: #475569; font-weight: 500;"></div>
-    </div>
+      <div class="final-score-box">
+        <div>अंतिम प्राप्त गुण (Net Score)</div>
+        <div class="score" id="res-final-score">0.00</div>
+        <div id="res-percentage" style="color: #475569; font-weight: 500;"></div>
+      </div>
 
-    <!-- YOUTUBE SOLUTION VIDEO SECTION -->
-    <div id="solution-video-container">
-      <h3 style="color: var(--primary); margin-bottom: 10px;">आजच्या प्रश्नांचे स्पष्टीकरण (Video Solution)</h3>
-      <a id="youtube-link" href="#" target="_blank" class="btn-youtube">▶ YouTube वर स्पष्टीकरण पहा</a>
-      <div id="youtube-embed"></div>
+      <!-- Subject-wise Marks Summary -->
+      <div style="margin-top: 30px;">
+        <h3 style="color: var(--primary); border-bottom: 2px solid var(--accent); padding-bottom: 5px; margin-bottom: 15px;">विषयनिहाय विश्लेषण (Subject-wise Analysis)</h3>
+        <table class="marks-table">
+          <thead>
+            <tr>
+              <th>विषय (Subject)</th>
+              <th>बरोबर (Correct)</th>
+              <th>चुकीचे (Wrong)</th>
+              <th>सोडवले नाही (Unattempted)</th>
+            </tr>
+          </thead>
+          <tbody id="subject-summary-tbody">
+            <!-- Dynamically populated by JS -->
+          </tbody>
+        </table>
+      </div>
+
+      <!-- YOUTUBE SOLUTION VIDEO SECTION -->
+      <div id="solution-video-container">
+        <h3 style="color: var(--primary); margin-bottom: 10px;">आजच्या प्रश्नांचे स्पष्टीकरण (Video Solution)</h3>
+        <a id="youtube-link" href="#" target="_blank" class="btn-youtube">▶ YouTube वर स्पष्टीकरण पहा</a>
+        <div id="youtube-embed"></div>
+      </div>
+      
+      <!-- AD SECTION 3 (BOTTOM) 
+      <div class="ad-container" style="margin-top: 30px;">
+        <div class="ad-label">Advertisement</div>
+        <div style="color: #94a3b8;">(Bottom Ad Space / 728x90)</div>
+      </div> -->
+
     </div>
   </div>
+
 </div>
 
+<!-- FOOTER ADDED HERE. Paths start with '/' to resolve to root from any subfolder -->
 <footer>
   <p>&copy; 2026 KC97org Academy. All Rights Reserved.</p>
   <a href="/about-us.html">About Us</a> |
@@ -226,140 +270,105 @@
   <a href="/terms&condition.html">Terms & Conditions</a> |
   <a href="/contact-us.html">Contact Us</a>
 </footer>
+  
+<!-- तुमचा Question Bank इथे लोड होईल -->
+<script src="question_bank1.js"></script>
 
 <script>
 // ========================================================
-// 1. ADMIN CONFIGURATION
+// 1. CONFIGURATION (URLs & TIMERS)
 // ========================================================
-const GOOGLE_SHEET_WEBAPP_URL = "https://script.google.com/macros/s/AKfycbwgpeKVexGqBVc4CSb4F1W144sJ15n_mfB0XX9giEgfQ_xTZ1t-2aIdFU3kl2CXx-3_2A/exec"; 
-const DAILY_YOUTUBE_URL = "https://youtu.be/UqMFKVmh9D8?si=yl9irfxPSpksgP1O"; 
+const GOOGLE_SHEET_WEBAPP_URL = "https://script.google.com/macros/s/AKfycbwgpeKVexGqBVc4CSb4F1W144sJ15n_mfB0XX9giEgfQ_xTZ1t-2aIdFU3kl2CXx-3_2A/exec";
+const DAILY_YOUTUBE_URL = "https://www.youtube.com/watch?v=dQw4w9WgXcQ"; 
 
-// PAGINATION SETTING - एका पेजवर किती प्रश्न दिसायला हवेत?
-const QUESTIONS_PER_PAGE = 10; // (टेस्टिंगसाठी 2 ठेवले आहे, नंतर 10 किंवा 20 करू शकता)
+// TIMERS CONFIG (in minutes)
+const TIME_REGISTRATION = 5; 
+const TIME_PER_GROUP = 30; // Group A, B, C, D time
 
-// ========================================================
-// 2. DAILY MANAGEMENT
-// ========================================================
 const todayObj = new Date();
-const todayDateStr = todayObj.toISOString().split('T')[0];
 const formattedMarathiDate = todayObj.toLocaleDateString('mr-IN', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
-const DAILY_STORAGE_KEY = `mpsc_quiz_submitted_${todayDateStr}`;
-
 document.getElementById("display-date").innerText = `दिनांक: ${formattedMarathiDate}`;
 
 // ========================================================
-// 3. DAILY QUESTION BANK 
+// 3. PAPER PATTERN DISTRIBUTION MATRICES
+// Order: [Marathi, English, GK, Maths, Technical]
 // ========================================================
-const dailyQuizBank = [
-  { id: 1, q: "महाराष्ट्रातील वृत्तपत्रांचे जनक कोणाला म्हटले जाते?", opt: ["लोकमान्य टिळक", "बाळशास्त्री जांभेकर", "भाऊ महाजन", "गोपाळ गणेश आगरकर"], a: 1 },
-  { id: 2, q: "भारतात पहिला छापखाना पोर्तुगीजांनी कोणत्या वर्षी सुरू केला?", opt: ["1780", "1832", "1556", "1857"], a: 2 },
-  { id: 3, q: "1780 मध्ये जेम्स हिकी यांनी सुरू केलेले भारतातील पहिले वृत्तपत्र कोणते?", opt: ["दर्पण", "बॉम्बे हेराल्ड", "द मद्रास कुरिअर", "कलकत्ता जनरल अ‍ॅडव्हर्टायझर (बंगाल गॅझेट)"], a: 3 },
-  { id: 4, q: "1799 चा वृत्तपत्रांचा मुद्रण नियंत्रण कायदा कोणी आणला?", opt: ["लॉर्ड वेलस्ली", "लॉर्ड लिटन", "लॉर्ड डलहौसी", "चार्ल्स मेटकॉफ"], a: 0 }
-];
+const MATRICES = {
+  "GENERAL": [
+    [7, 6, 6, 6, 0], // Group A (25)
+    [6, 7, 6, 6, 0], // Group B (25)
+    [6, 6, 7, 6, 0], // Group C (25)
+    [6, 6, 6, 7, 0]  // Group D (25)
+  ],
+  "TECH_60_40": [
+    [3, 3, 2, 2, 15], // Group A
+    [2, 2, 3, 3, 15], // Group B
+    [3, 2, 2, 3, 15], // Group C
+    [2, 3, 3, 2, 15]  // Group D
+  ],
+  "TECH_40_60": [
+    [5, 4, 3, 3, 10], // Group A
+    [4, 5, 3, 3, 10], // Group B
+    [3, 3, 4, 5, 10], // Group C
+    [3, 3, 5, 4, 10]  // Group D
+  ]
+};
 
-document.getElementById("total-questions-count").innerText = dailyQuizBank.length;
+const groupNames = ["Group A (Very Easy)", "Group B (Easy)", "Group C (Moderate)", "Group D (Hard)"];
 
 // ========================================================
-// 4. UI LOGIC, PAGINATION & CONSENT TOGGLE
+// 4. EXAM STATE VARIABLES
 // ========================================================
-const container = document.getElementById("questions-container");
-const quizForm = document.getElementById("quiz-form");
-const scoreCard = document.getElementById("score-card");
+let generatedPaper = [[], [], [], []]; // Array of 4 groups
+let studentInfo = {};
+let finalScores = { correct: 0, wrong: 0, unattempted: 0 };
+let subjectScores = {
+  "मराठी": { correct: 0, wrong: 0, unattempted: 0 },
+  "English": { correct: 0, wrong: 0, unattempted: 0 },
+  "GK": { correct: 0, wrong: 0, unattempted: 0 },
+  "Maths & Reasoning": { correct: 0, wrong: 0, unattempted: 0 },
+  "Technical": { correct: 0, wrong: 0, unattempted: 0 }
+};
+
+let currentGroupIndex = -1; // -1 = Registration
+let timerInterval;
+let timeLeft = 0;
+
+// ========================================================
+// 5. REGISTRATION & INITIAL TIMER LOGIC
+// ========================================================
 const consentCheckbox = document.getElementById("consent_checkbox");
-const submitBtn = document.getElementById("submit-btn");
-
-let currentPage = 1;
-const totalPages = Math.ceil(dailyQuizBank.length / QUESTIONS_PER_PAGE);
-
-document.getElementById("total-pages-display").innerText = totalPages;
+const btnStartExam = document.getElementById("btn-start-exam");
 
 consentCheckbox.addEventListener("change", function() {
-  submitBtn.disabled = !this.checked;
-  if (this.checked) document.getElementById("err_consent").style.display = "none";
+  btnStartExam.disabled = !this.checked;
+  if(this.checked) document.getElementById("err_consent").style.display = "none";
 });
 
-renderQuestions();
-
-function renderQuestions() {
-  dailyQuizBank.forEach((item, index) => {
-    const pageNum = Math.floor(index / QUESTIONS_PER_PAGE) + 1;
-    const qDiv = document.createElement("div");
-    qDiv.className = `question-block page-item-${pageNum}`;
-
-    // Show only page 1 initially
-    if (pageNum === 1) qDiv.style.display = "block";
-
-    qDiv.innerHTML = `
-      <span class="badge">प्रश्न ${index + 1} of ${dailyQuizBank.length}</span>
-      <div class="q-title">${item.q}</div>
-      <div class="options">
-        ${item.opt.map((optText, optIdx) => `
-          <label>
-            <input type="radio" name="q_${item.id}" value="${optIdx}">
-            ${optText}
-          </label>
-        `).join('')}
-      </div>
-    `;
-    container.appendChild(qDiv);
+window.onload = () => {
+  // Start 5 min timer for Registration
+  startTimer(TIME_REGISTRATION * 60, "नोंदणीसाठी वेळ (Reg Time)", () => {
+    alert("नोंदणीची वेळ संपली आहे. परीक्षा आपोआप सबमिट केली जात आहे (० गुण).");
+    autoSubmitUnattemptedExam();
   });
-  updatePaginationUI();
-}
+};
 
-function changePage(delta) {
-  currentPage += delta;
-
-  // Hide all questions
-  const allBlocks = document.querySelectorAll(".question-block");
-  allBlocks.forEach(block => block.style.display = "none");
-
-  // Show only current page questions
-  const currentBlocks = document.querySelectorAll(`.page-item-${currentPage}`);
-  currentBlocks.forEach(block => block.style.display = "block");
-
-  updatePaginationUI();
-
-  // Scroll to top of questions
-  document.getElementById("question-header-target").scrollIntoView({ behavior: 'smooth', block: 'start' });
-}
-
-function updatePaginationUI() {
-  document.getElementById("current-page-display").innerText = currentPage;
-
-  const btnPrev = document.getElementById("btn-prev");
-  const btnNext = document.getElementById("btn-next");
-  const btnSubmit = document.getElementById("submit-btn");
-
-  // Disable Prev on first page
-  btnPrev.disabled = (currentPage === 1);
-
-  // Toggle Next / Submit on last page
-  if (currentPage === totalPages) {
-    btnNext.style.display = "none";
-    btnSubmit.style.display = "block";
-  } else {
-    btnNext.style.display = "block";
-    btnSubmit.style.display = "none";
-  }
-}
-
-const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
-const phoneRegex = /^[6-9]\d{9}$/;
-
-quizForm.addEventListener("submit", async function(e) {
+document.getElementById("reg-form").addEventListener("submit", function(e) {
   e.preventDefault();
-
+  
   if (!consentCheckbox.checked) {
     document.getElementById("err_consent").style.display = "block";
-    window.scrollTo({ top: 150, behavior: 'smooth' });
     return;
   }
-
+  
   const nameVal = document.getElementById("u_name").value.trim();
   const phoneVal = document.getElementById("u_phone").value.trim();
   const emailVal = document.getElementById("u_email").value.trim();
   const locationVal = document.getElementById("u_location").value.trim();
-
+  const paperType = document.getElementById("paper_type").value;
+  
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+  const phoneRegex = /^[6-9]\d{9}$/;
   let isValid = true;
 
   if (nameVal.length < 3) { document.getElementById("err_name").style.display = "block"; isValid = false; } else { document.getElementById("err_name").style.display = "none"; }
@@ -367,77 +376,315 @@ quizForm.addEventListener("submit", async function(e) {
   if (!emailRegex.test(emailVal)) { document.getElementById("err_email").style.display = "block"; isValid = false; } else { document.getElementById("err_email").style.display = "none"; }
   if (locationVal.length < 2) { document.getElementById("err_location").style.display = "block"; isValid = false; } else { document.getElementById("err_location").style.display = "none"; }
 
-  if (!isValid) {
-    document.getElementById("u_name").scrollIntoView({ behavior: 'smooth', block: 'center' });
-    return;
+  if (!isValid) return;
+
+  studentInfo = { name: nameVal, phone: phoneVal, email: emailVal, location: locationVal, paperType: paperType };
+  
+  startExamSequence();
+});
+
+function autoSubmitUnattemptedExam() {
+  studentInfo = { 
+    name: document.getElementById("u_name").value || "Time-Out (No Name)", 
+    phone: document.getElementById("u_phone").value || "0000000000", 
+    email: document.getElementById("u_email").value || "timeout@kc97.com", 
+    location: document.getElementById("u_location").value || "Unknown",
+    paperType: document.getElementById("paper_type").value
+  };
+  
+  // Set all 100 questions as unattempted based on matrix
+  finalScores.unattempted = 100;
+  const matrix = MATRICES[studentInfo.paperType];
+  for(let g=0; g<4; g++) {
+    subjectScores["मराठी"].unattempted += matrix[g][0];
+    subjectScores["English"].unattempted += matrix[g][1];
+    subjectScores["GK"].unattempted += matrix[g][2];
+    subjectScores["Maths & Reasoning"].unattempted += matrix[g][3];
+    subjectScores["Technical"].unattempted += matrix[g][4];
+  }
+  
+  processFinalResult();
+}
+
+// ========================================================
+// 6. EXAM GENERATOR LOGIC
+// ========================================================
+function shuffle(array) {
+  let arr = [...array];
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
+function startExamSequence() {
+  document.getElementById("section-registration").classList.remove("active-section");
+  document.getElementById("section-exam").classList.add("active-section");
+
+  // Clone & Shuffle all banks so no repetition
+  let b_mar = shuffle(typeof bankMarathi !== 'undefined' ? bankMarathi : []);
+  let b_eng = shuffle(typeof bankEnglish !== 'undefined' ? bankEnglish : []);
+  let b_gk = shuffle(typeof bankGK !== 'undefined' ? bankGK : []);
+  let b_mat = shuffle(typeof bankMaths !== 'undefined' ? bankMaths : []);
+  let b_tech = shuffle(typeof bankTech !== 'undefined' ? bankTech : []);
+  
+  let p_mar = shuffle(typeof paraMarathi !== 'undefined' ? paraMarathi : []);
+  let p_eng = shuffle(typeof paraEnglish !== 'undefined' ? paraEnglish : []);
+
+  const matrix = MATRICES[studentInfo.paperType];
+  
+  // Decide randomly which group gets the paragraph ensuring they are NOT in the same group
+  let availableGroups = [0, 1, 2, 3];
+  availableGroups = shuffle(availableGroups);
+  let marathiParaGroup = availableGroups[0]; 
+  let englishParaGroup = availableGroups[1]; 
+
+  for(let g=0; g<4; g++) {
+    generatedPaper[g] = [];
+    const counts = matrix[g]; // [Mar, Eng, GK, Mat, Tech]
+
+    // Helper: Extracts questions logic matching your requirements
+    const extractQs = (subject, count, standaloneBank, paraBank, isParaGroup) => {
+      let qList = [];
+      
+      // If this group is assigned the paragraph AND a paragraph is available AND questions > 0
+      if (isParaGroup && paraBank && paraBank.length > 0 && count > 0) {
+        let p = paraBank.pop(); // takes EXACTLY one paragraph
+        
+        // Take maximum required questions from the paragraph (up to 5 or whatever count allows)
+        let paraQCount = Math.min(count, 5); 
+        
+        let selectedParaQs = p.qs.slice(0, paraQCount); 
+        qList.push({ isPara: true, subject: subject, text: p.para, qs: selectedParaQs });
+        
+        count -= paraQCount; // deduct the ones we just added via paragraph
+      }
+      
+      // Fill remaining requirements (if any) with standalone questions
+      for(let i=0; i<count; i++) {
+        if(standaloneBank.length > 0) {
+          let sq = standaloneBank.pop();
+          qList.push({ isPara: false, subject: subject, ...sq });
+        }
+      }
+      return qList;
+    };
+
+    generatedPaper[g] = generatedPaper[g].concat(extractQs("मराठी", counts[0], b_mar, p_mar, (g === marathiParaGroup)));
+    generatedPaper[g] = generatedPaper[g].concat(extractQs("English", counts[1], b_eng, p_eng, (g === englishParaGroup)));
+    generatedPaper[g] = generatedPaper[g].concat(extractQs("GK", counts[2], b_gk, null, false));
+    generatedPaper[g] = generatedPaper[g].concat(extractQs("Maths & Reasoning", counts[3], b_mat, null, false));
+    generatedPaper[g] = generatedPaper[g].concat(extractQs("Technical", counts[4], b_tech, null, false));
   }
 
-  let correctCount = 0, wrongCount = 0, unattemptedCount = 0;
+  currentGroupIndex = 0;
+  loadGroupUI(currentGroupIndex);
+}
 
-  dailyQuizBank.forEach(item => {
-    const selected = document.querySelector(`input[name="q_${item.id}"]:checked`);
-    if (!selected) {
-      unattemptedCount++;
+// ========================================================
+// 7. UI FOR GROUPS & TIMERS
+// ========================================================
+function startTimer(seconds, label, onTimeout) {
+  clearInterval(timerInterval);
+  timeLeft = seconds;
+  document.getElementById("timer-container").style.display = "block";
+  document.getElementById("timer-label").innerText = label;
+  
+  timerInterval = setInterval(() => {
+    timeLeft--;
+    let m = Math.floor(timeLeft / 60).toString().padStart(2, '0');
+    let s = (timeLeft % 60).toString().padStart(2, '0');
+    document.getElementById("time-display").innerText = `${m}:${s}`;
+    
+    if (timeLeft <= 0) {
+      clearInterval(timerInterval);
+      onTimeout();
+    }
+  }, 1000);
+}
+
+function loadGroupUI(gIndex) {
+  document.getElementById("current-group-header").innerText = groupNames[gIndex];
+  const container = document.getElementById("questions-container");
+  container.innerHTML = "";
+  
+  let qNumber = 1;
+  generatedPaper[gIndex].forEach(item => {
+    if (item.isPara) {
+      // Render Paragraph block
+      let pDiv = document.createElement("div");
+      pDiv.className = "para-container";
+      pDiv.innerText = item.text;
+      container.appendChild(pDiv);
+      
+      // Render Paragraph Questions
+      item.qs.forEach(pq => {
+        container.appendChild(createQHTML(pq, qNumber++, item.subject, gIndex));
+      });
     } else {
-      const selectedVal = parseInt(selected.value, 10);
-      if (selectedVal === item.a) correctCount++; else wrongCount++;
+      // Render Standalone Question
+      container.appendChild(createQHTML(item, qNumber++, item.subject, gIndex));
     }
   });
 
-  const penalty = wrongCount * 0.25;
-  const finalScore = (correctCount * 1.0) - penalty;
-  const percentage = ((finalScore / dailyQuizBank.length) * 100).toFixed(2);
-
-  // Added Location to payload
-  const payload = {
-    timestamp: new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' }),
-    date: todayDateStr, name: nameVal, phone: phoneVal, email: emailVal, location: locationVal,
-    totalQuestions: dailyQuizBank.length, correct: correctCount, wrong: wrongCount,
-    unattempted: unattemptedCount, negativeMarks: penalty.toFixed(2), finalScore: finalScore.toFixed(2),
-    percentage: `${percentage}%`, consent: "Yes"
-  };
-
-  submitBtn.disabled = true;
-  document.getElementById("loading-indicator").style.display = "block";
-  document.getElementById("pagination-controls").style.display = "none";
-
-  if (GOOGLE_SHEET_WEBAPP_URL !== "") {
-    try {
-      await fetch(GOOGLE_SHEET_WEBAPP_URL, {
-        method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify(payload)
-      });
-    } catch (err) { console.error("Sheet error: ", err); }
+  if(gIndex === 3) {
+    document.getElementById("btn-next-group").innerText = "अंतिम सबमिट करा (Final Submit)";
+  } else {
+    document.getElementById("btn-next-group").innerText = "पुढील गट (Next Section) ▶";
   }
 
-  document.getElementById("loading-indicator").style.display = "none";
-  quizForm.style.display = "none";
+  window.scrollTo(0,0);
+  
+  // Start Group Timer
+  startTimer(TIME_PER_GROUP * 60, `${groupNames[gIndex]} वेळ (Time Left): `, () => {
+    alert(`${groupNames[gIndex]} ची वेळ संपली आहे. आपोआप पुढील गट सुरू होत आहे.`);
+    submitCurrentGroup(true);
+  });
+}
 
-  showScoreCardFinal(nameVal, phoneVal, emailVal, locationVal, correctCount, wrongCount, penalty, finalScore, unattemptedCount, percentage);
-});
+function createQHTML(qObj, num, subject, gIndex) {
+  let div = document.createElement("div");
+  div.className = "question-block";
+  div.setAttribute("data-subject", subject); 
+  
+  // Create unique name to store value and prevent overlapping across groups
+  let inputName = `grp${gIndex}_q${num}`;
+  
+  let html = `<div class="badge-subject">${subject}</div>`;
+  html += `<div class="q-title">Q${num}. ${qObj.q}</div><div class="options">`;
+  
+  qObj.opt.forEach((optText, optIdx) => {
+    html += `<label><input type="radio" name="${inputName}" value="${optIdx}" data-ans="${qObj.a}">${optText}</label>`;
+  });
+  html += `</div>`;
+  div.innerHTML = html;
+  return div;
+}
 
-function showScoreCardFinal(name, phone, email, location, correct, wrong, penalty, finalScore, unattempted, percentage) {
-  scoreCard.style.display = "block";
-  document.getElementById("card-date-line").innerText = `चाचणी दिनांक: ${formattedMarathiDate}`;
+// ========================================================
+// 8. SCORING & FINAL SUBMISSION (FAST UI UPDATE)
+// ========================================================
+function submitCurrentGroup(isAutoSubmit) {
+  if (!isAutoSubmit) {
+    if (!confirm("तुम्हाला खात्री आहे का की हा गट सबमिट करायचा आहे? तुम्ही मागे येऊ शकणार नाही.")) return;
+  }
 
-  // Added Location to Scorecard UI
-  document.getElementById("card-student-details").innerHTML = `<div><strong>विद्यार्थ्याचे नाव:</strong> ${name}</div><div><strong>मोबाईल:</strong> ${phone}</div><div><strong>ईमेल:</strong> ${email}</div><div><strong>ठिकाण:</strong> ${location}</div>`;
+  // Calculate scores for CURRENT group only
+  const container = document.getElementById("questions-container");
+  const blocks = container.querySelectorAll(".question-block");
+  
+  blocks.forEach(block => {
+    let currentSubject = block.getAttribute("data-subject");
+    const checked = block.querySelector('input[type="radio"]:checked');
+    
+    if (!checked) {
+      finalScores.unattempted++;
+      if(subjectScores[currentSubject]) subjectScores[currentSubject].unattempted++;
+    } else {
+      let selectedAns = parseInt(checked.value);
+      let correctAns = parseInt(checked.getAttribute("data-ans"));
+      if (selectedAns === correctAns) {
+        finalScores.correct++;
+        if(subjectScores[currentSubject]) subjectScores[currentSubject].correct++;
+      } else {
+        finalScores.wrong++;
+        if(subjectScores[currentSubject]) subjectScores[currentSubject].wrong++;
+      }
+    }
+  });
 
-  document.getElementById("res-total").innerText = dailyQuizBank.length;
-  document.getElementById("res-correct").innerText = `${correct} (+${correct} गुण)`;
-  document.getElementById("res-wrong").innerText = `${wrong}`;
+  currentGroupIndex++;
+  if (currentGroupIndex > 3) {
+    processFinalResult(); 
+  } else {
+    loadGroupUI(currentGroupIndex);
+  }
+}
+
+function processFinalResult() {
+  clearInterval(timerInterval);
+  document.getElementById("timer-container").style.display = "none";
+  document.getElementById("section-registration").classList.remove("active-section");
+  document.getElementById("section-exam").classList.remove("active-section");
+  
+  const penalty = finalScores.wrong * 0.25;
+  const netScore = (finalScores.correct * 1.0) - penalty;
+  const percentage = netScore.toFixed(2); 
+
+  // 1. Prepare Google Sheet Payload
+  const payload = {
+    timestamp: new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' }),
+    date: todayObj.toISOString().split('T')[0],
+    name: studentInfo.name,
+    phone: studentInfo.phone,
+    email: studentInfo.email,
+    location: studentInfo.location,
+    totalQuestions: 100,
+    correct: finalScores.correct,
+    wrong: finalScores.wrong,
+    unattempted: finalScores.unattempted,
+    negativeMarks: penalty.toFixed(2),
+    finalScore: netScore.toFixed(2),
+    percentage: `${percentage}%`,
+    consent: "Yes"
+  };
+
+  // 2. Send to Google Sheets IN THE BACKGROUND (No UI Freezing)
+  if (GOOGLE_SHEET_WEBAPP_URL !== "") {
+    fetch(GOOGLE_SHEET_WEBAPP_URL, {
+      method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify(payload)
+    }).catch(err => console.error("Sheet error: ", err));
+  }
+
+  // 3. Show Final Scorecard
+  document.getElementById("section-result").classList.add("active-section");
+  
+  document.getElementById("card-date-line").innerText = `चाचणी दिनांक: ${formattedMarathiDate} | पॅटर्न: ${studentInfo.paperType}`;
+  document.getElementById("card-student-details").innerHTML = `
+    <div><strong>नाव:</strong> ${studentInfo.name}</div>
+    <div><strong>मोबाईल:</strong> ${studentInfo.phone}</div>
+    <div><strong>ईमेल:</strong> ${studentInfo.email}</div>
+    <div><strong>ठिकाण:</strong> ${studentInfo.location}</div>
+  `;
+  
+  document.getElementById("res-correct").innerText = `${finalScores.correct} (+${finalScores.correct} गुण)`;
+  document.getElementById("res-wrong").innerText = `${finalScores.wrong}`;
   document.getElementById("res-penalty").innerText = `-${penalty.toFixed(2)} गुण`;
-  document.getElementById("res-unattempted").innerText = unattempted;
-  document.getElementById("res-final-score").innerText = `${finalScore.toFixed(2)} / ${dailyQuizBank.length}`;
+  document.getElementById("res-unattempted").innerText = finalScores.unattempted;
+  document.getElementById("res-final-score").innerText = `${netScore.toFixed(2)} / 100`;
   document.getElementById("res-percentage").innerText = `टक्केवारी: ${percentage}%`;
 
+  // Update Subject-wise Breakdown Table
+  let subjectHtml = "";
+  for(let subj in subjectScores) {
+    let scores = subjectScores[subj];
+    let totalQs = scores.correct + scores.wrong + scores.unattempted;
+    
+    if(totalQs > 0) {
+      subjectHtml += `
+        <tr>
+          <td><strong>${subj}</strong></td>
+          <td style="color: var(--success); font-weight: bold;">${scores.correct}</td>
+          <td style="color: var(--danger); font-weight: bold;">${scores.wrong}</td>
+          <td>${scores.unattempted}</td>
+        </tr>
+      `;
+    }
+  }
+  document.getElementById("subject-summary-tbody").innerHTML = subjectHtml;
+
+  // 4. Setup YouTube Video
   if (DAILY_YOUTUBE_URL && DAILY_YOUTUBE_URL.trim() !== "") {
     document.getElementById("solution-video-container").style.display = "block";
     document.getElementById("youtube-link").href = DAILY_YOUTUBE_URL;
     let videoId = "";
     if (DAILY_YOUTUBE_URL.includes("watch?v=")) videoId = DAILY_YOUTUBE_URL.split("watch?v=")[1].split("&")[0];
     else if (DAILY_YOUTUBE_URL.includes("youtu.be/")) videoId = DAILY_YOUTUBE_URL.split("youtu.be/")[1].split("?")[0];
+    
     if (videoId) document.getElementById("youtube-embed").innerHTML = `<iframe width="100%" height="315" src="https://www.youtube.com/embed/${videoId}" frameborder="0" allowfullscreen style="border-radius: 8px; margin-top:10px;"></iframe>`;
   }
+  
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 </script>
