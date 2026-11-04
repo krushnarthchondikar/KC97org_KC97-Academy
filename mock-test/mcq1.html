@@ -187,7 +187,7 @@
   <!-- SECTION 2: EXAM INTERFACE (GROUPS A,B,C,D) -->
   <!-- ======================================= -->
   <div id="section-exam" class="app-section">
-    <div class="group-header" id="current-group-header">Group A (Very Easy Level)</div>
+    <div class="group-header" id="current-group-header">Group A</div>
     
     <div id="questions-container"></div>
     
@@ -271,8 +271,7 @@
   <a href="/contact-us.html">Contact Us</a>
 </footer>
   
-<!-- तुमचा Question Bank इथे लोड होईल -->
-<script src="question_bank1.js"></script>
+<!-- External Script tags updated based on dropdown choice below -->
 
 <script>
 // ========================================================
@@ -314,7 +313,7 @@ const MATRICES = {
   ]
 };
 
-const groupNames = ["Group A (Very Easy)", "Group B (Easy)", "Group C (Moderate)", "Group D (Hard)"];
+const groupNames = ["Group A", "Group B", "Group C", "Group D"];
 
 // ========================================================
 // 4. EXAM STATE VARIABLES
@@ -339,6 +338,7 @@ let timeLeft = 0;
 // ========================================================
 const consentCheckbox = document.getElementById("consent_checkbox");
 const btnStartExam = document.getElementById("btn-start-exam");
+const paperTypeSelect = document.getElementById("paper_type");
 
 consentCheckbox.addEventListener("change", function() {
   btnStartExam.disabled = !this.checked;
@@ -380,7 +380,8 @@ document.getElementById("reg-form").addEventListener("submit", function(e) {
 
   studentInfo = { name: nameVal, phone: phoneVal, email: emailVal, location: locationVal, paperType: paperType };
   
-  startExamSequence();
+  // Dynamically load the correct script file based on selection
+  loadExternalScriptAndStart(paperType);
 });
 
 function autoSubmitUnattemptedExam() {
@@ -406,6 +407,31 @@ function autoSubmitUnattemptedExam() {
   processFinalResult();
 }
 
+function loadExternalScriptAndStart(paperType) {
+  let scriptSrc = "";
+  if (paperType === "GENERAL") {
+    scriptSrc = "question_bank_general1.js";
+  } else if (paperType === "TECH_60_40") {
+    scriptSrc = "question_bank_tech60-40_1.js";
+  } else if (paperType === "TECH_40_60") {
+    scriptSrc = "question_bank_tech40-60_1.js";
+  }
+
+  const existingScript = document.getElementById("dynamic-qb-script");
+  if (existingScript) existingScript.remove();
+
+  const script = document.createElement("script");
+  script.src = scriptSrc;
+  script.id = "dynamic-qb-script";
+  script.onload = () => {
+    startExamSequence();
+  };
+  script.onerror = () => {
+    alert(`Failed to load ${scriptSrc}. Please make sure the file exists.`);
+  }
+  document.body.appendChild(script);
+}
+
 // ========================================================
 // 6. EXAM GENERATOR LOGIC
 // ========================================================
@@ -422,15 +448,30 @@ function startExamSequence() {
   document.getElementById("section-registration").classList.remove("active-section");
   document.getElementById("section-exam").classList.add("active-section");
 
-  // Clone & Shuffle all banks so no repetition
-  let b_mar = shuffle(typeof bankMarathi !== 'undefined' ? bankMarathi : []);
-  let b_eng = shuffle(typeof bankEnglish !== 'undefined' ? bankEnglish : []);
-  let b_gk = shuffle(typeof bankGK !== 'undefined' ? bankGK : []);
-  let b_mat = shuffle(typeof bankMaths !== 'undefined' ? bankMaths : []);
-  let b_tech = shuffle(typeof bankTech !== 'undefined' ? bankTech : []);
+  let b_mar = [];
+  let b_eng = [];
+  let b_gk = [];
+  let b_mat = [];
+  let b_tech = [];
+  let p_mar = [];
+  let p_eng = [];
   
-  let p_mar = shuffle(typeof paraMarathi !== 'undefined' ? paraMarathi : []);
-  let p_eng = shuffle(typeof paraEnglish !== 'undefined' ? paraEnglish : []);
+  if (studentInfo.paperType === "GENERAL") {
+    b_mar = shuffle(typeof bankMarathi !== 'undefined' ? bankMarathi : []);
+    b_eng = shuffle(typeof bankEnglish !== 'undefined' ? bankEnglish : []);
+    b_gk = shuffle(typeof bankGK !== 'undefined' ? bankGK : []);
+    b_mat = shuffle(typeof bankMaths !== 'undefined' ? bankMaths : []);
+    p_mar = shuffle(typeof paraMarathi !== 'undefined' ? paraMarathi : []);
+    p_eng = shuffle(typeof paraEnglish !== 'undefined' ? paraEnglish : []);
+  } else if (studentInfo.paperType === "TECH_60_40" || studentInfo.paperType === "TECH_40_60") {
+     b_mar = shuffle(typeof bankMarathi !== 'undefined' ? bankMarathi : []);
+     b_eng = shuffle(typeof bankEnglish !== 'undefined' ? bankEnglish : []);
+     b_gk = shuffle(typeof bankGK !== 'undefined' ? bankGK : []);
+     b_mat = shuffle(typeof bankMaths !== 'undefined' ? bankMaths : []);
+     b_tech = shuffle(typeof bankTech !== 'undefined' ? bankTech : []);
+     p_mar = shuffle(typeof paraMarathi !== 'undefined' ? paraMarathi : []);
+     p_eng = shuffle(typeof paraEnglish !== 'undefined' ? paraEnglish : []);
+  }
 
   const matrix = MATRICES[studentInfo.paperType];
   
