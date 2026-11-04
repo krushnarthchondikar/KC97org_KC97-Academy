@@ -27,6 +27,9 @@
       line-height: 1.6;
       margin: 0;
       padding: 20px 10px;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
     }
     .container {
       max-width: 820px;
@@ -35,11 +38,13 @@
       padding: 30px;
       border-radius: 12px;
       box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      flex-grow: 1;
+      width: 100%;
     }
     h1 { color: var(--primary); text-align: center; margin-bottom: 4px; }
     .date-badge { display: block; text-align: center; font-weight: 600; color: var(--accent); margin-bottom: 16px; }
     .rules-banner { background-color: #eff6ff; border-left: 4px solid var(--accent); padding: 12px 16px; margin-bottom: 24px; font-size: 0.95rem; border-radius: 4px; }
-    
+
     .ad-container {
       background-color: #f1f5f9; border: 1px dashed #94a3b8; border-radius: 8px; text-align: center;
       padding: 15px; margin: 20px 0; min-height: 120px; display: flex; flex-direction: column; align-items: center; justify-content: center;
@@ -54,11 +59,11 @@
     .form-group input { padding: 10px 12px; border: 1px solid var(--border); border-radius: 6px; font-size: 1rem; outline: none; }
     .form-group input:focus { border-color: var(--accent); box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2); }
     .error-msg { color: var(--danger); font-size: 0.8rem; margin-top: 3px; display: none; }
-    
+
     .consent-container { background-color: #fffbeb; border: 1px solid #fef3c7; padding: 12px 16px; border-radius: 8px; margin-bottom: 15px; display: flex; align-items: flex-start; gap: 10px; }
     .consent-container input[type="checkbox"] { width: 18px; height: 18px; margin-top: 3px; cursor: pointer; }
     .consent-container label { font-size: 0.92rem; color: #92400e; cursor: pointer; line-height: 1.4; }
-    
+
     .question-block { border: 1px solid var(--border); border-radius: 8px; padding: 18px; margin-bottom: 16px; background-color: #ffffff; display: none; }
     .q-title { font-weight: 600; margin-bottom: 10px; }
     .options label { display: flex; align-items: center; padding: 8px 12px; margin-bottom: 6px; border: 1px solid #e2e8f0; border-radius: 6px; cursor: pointer; transition: background 0.2s; }
@@ -72,11 +77,11 @@
     .btn-page { background: #64748b; color: #fff; padding: 10px 18px; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; }
     .btn-page:hover:not(:disabled) { background: #475569; }
     .btn-page:disabled { background: #cbd5e1; cursor: not-allowed; }
-    
+
     .btn-submit { display: none; background: var(--primary); color: #fff; font-size: 1.1rem; font-weight: bold; padding: 12px 20px; border: none; border-radius: 6px; cursor: pointer; }
     .btn-submit:disabled { background: #94a3b8; cursor: not-allowed; }
     .btn-submit:hover:not(:disabled) { background: var(--primary-dark); }
-    
+
     #score-card { display: none; border-radius: 10px; border: 2px solid var(--accent); background: #ffffff; padding: 24px; margin-top: 20px; }
     .card-header { text-align: center; border-bottom: 2px dashed #cbd5e1; padding-bottom: 15px; margin-bottom: 15px; }
     .card-header h2 { margin: 0; color: var(--primary); }
@@ -90,6 +95,11 @@
     #solution-video-container { display: none; text-align: center; margin-top: 25px; padding-top: 20px; border-top: 2px dashed #cbd5e1; }
     .btn-youtube { display: inline-flex; align-items: center; gap: 8px; background: var(--youtube); color: #fff; padding: 10px 20px; border-radius: 6px; text-decoration: none; font-weight: bold; margin-bottom: 15px; transition: 0.2s; }
     .btn-youtube:hover { background: #cc0000; }
+
+    /* Footer styles */
+    footer { text-align: center; padding: 20px; margin-top: 40px; border-top: 1px solid #cbd5e1; font-size: 0.9rem; width: 100%; background: var(--bg); }
+    footer a { color: var(--accent); text-decoration: none; margin: 0 10px; font-weight: 500; }
+    footer a:hover { text-decoration: underline; }
   </style>
 </head>
 <body>
@@ -209,6 +219,14 @@
   </div>
 </div>
 
+<footer>
+  <p>&copy; 2026 KC97org Academy. All Rights Reserved.</p>
+  <a href="/about-us.html">About Us</a> |
+  <a href="/privacy-policy.html">Privacy Policy</a> |
+  <a href="/terms&condition.html">Terms & Conditions</a> |
+  <a href="/contact-us.html">Contact Us</a>
+</footer>
+
 <script>
 // ========================================================
 // 1. ADMIN CONFIGURATION
@@ -267,7 +285,7 @@ function renderQuestions() {
     const pageNum = Math.floor(index / QUESTIONS_PER_PAGE) + 1;
     const qDiv = document.createElement("div");
     qDiv.className = `question-block page-item-${pageNum}`;
-    
+
     // Show only page 1 initially
     if (pageNum === 1) qDiv.style.display = "block";
 
@@ -290,24 +308,24 @@ function renderQuestions() {
 
 function changePage(delta) {
   currentPage += delta;
-  
+
   // Hide all questions
   const allBlocks = document.querySelectorAll(".question-block");
   allBlocks.forEach(block => block.style.display = "none");
-  
+
   // Show only current page questions
   const currentBlocks = document.querySelectorAll(`.page-item-${currentPage}`);
   currentBlocks.forEach(block => block.style.display = "block");
-  
+
   updatePaginationUI();
-  
+
   // Scroll to top of questions
   document.getElementById("question-header-target").scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
 function updatePaginationUI() {
   document.getElementById("current-page-display").innerText = currentPage;
-  
+
   const btnPrev = document.getElementById("btn-prev");
   const btnNext = document.getElementById("btn-next");
   const btnSubmit = document.getElementById("submit-btn");
@@ -341,7 +359,7 @@ quizForm.addEventListener("submit", async function(e) {
   const phoneVal = document.getElementById("u_phone").value.trim();
   const emailVal = document.getElementById("u_email").value.trim();
   const locationVal = document.getElementById("u_location").value.trim();
-  
+
   let isValid = true;
 
   if (nameVal.length < 3) { document.getElementById("err_name").style.display = "block"; isValid = false; } else { document.getElementById("err_name").style.display = "none"; }
@@ -393,17 +411,17 @@ quizForm.addEventListener("submit", async function(e) {
 
   document.getElementById("loading-indicator").style.display = "none";
   quizForm.style.display = "none";
-  
+
   showScoreCardFinal(nameVal, phoneVal, emailVal, locationVal, correctCount, wrongCount, penalty, finalScore, unattemptedCount, percentage);
 });
 
 function showScoreCardFinal(name, phone, email, location, correct, wrong, penalty, finalScore, unattempted, percentage) {
   scoreCard.style.display = "block";
   document.getElementById("card-date-line").innerText = `चाचणी दिनांक: ${formattedMarathiDate}`;
-  
+
   // Added Location to Scorecard UI
   document.getElementById("card-student-details").innerHTML = `<div><strong>विद्यार्थ्याचे नाव:</strong> ${name}</div><div><strong>मोबाईल:</strong> ${phone}</div><div><strong>ईमेल:</strong> ${email}</div><div><strong>ठिकाण:</strong> ${location}</div>`;
-  
+
   document.getElementById("res-total").innerText = dailyQuizBank.length;
   document.getElementById("res-correct").innerText = `${correct} (+${correct} गुण)`;
   document.getElementById("res-wrong").innerText = `${wrong}`;
