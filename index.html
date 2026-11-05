@@ -1,78 +1,127 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8041295154848064"
-     crossorigin="anonymous"></script>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8041295154848064" crossorigin="anonymous"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KC97org Professional Divisions</title>
-    <!-- Tailwind CSS for layout and utility classes -->
+    
+    <!-- Tailwind CSS & Google Fonts -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+            background-color: #f8fafc;
         }
 
-        /* Professional Button Base Styles */
+        /* 1. Graceful Entrance Animations */
+        @keyframes fadeInUp {
+            0% { opacity: 0; transform: translateY(24px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-up {
+            opacity: 0;
+            animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        .delay-100 { animation-delay: 100ms; }
+        .delay-200 { animation-delay: 200ms; }
+        .delay-300 { animation-delay: 300ms; }
+        .delay-400 { animation-delay: 400ms; }
+
+        /* 2. Organic Ambient Background Animations */
+        .blob {
+            position: absolute;
+            filter: blur(80px);
+            z-index: 0;
+            opacity: 0.5;
+            animation: floatMorph 12s infinite ease-in-out alternate;
+        }
+        @keyframes floatMorph {
+            0% { transform: translateY(0) scale(1) rotate(0deg); border-radius: 50%; }
+            50% { border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%; }
+            100% { transform: translateY(-30px) scale(1.1) rotate(10deg); border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; }
+        }
+
+        /* 3. Premium Button Base & Hover */
         .btn-pro {
             position: relative;
             overflow: hidden;
-            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            gap: 16px;
+            width: 100%;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        .btn-pro:hover {
+            transform: translateY(-5px) scale(1.01);
+            box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255,255,255,0.4);
+        }
+        .btn-pro:active {
+            transform: translateY(1px) scale(0.99);
+        }
+
+        /* 4. Glass Shine Hover Effect */
+        .btn-pro::after {
+            content: '';
+            position: absolute;
+            top: 0; 
+            left: -150%;
+            width: 50%; 
+            height: 100%;
+            background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.25) 50%, rgba(255,255,255,0) 100%);
+            transform: skewX(-25deg);
+            transition: all 0.75s ease;
+            pointer-events: none;
+        }
+        .btn-pro:hover::after {
+            left: 200%;
+            transition: all 0.75s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        /* Button-Specific Gradients */
+        .btn-academy {
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+            box-shadow: 0 4px 15px -3px rgba(37, 99, 235, 0.3);
+        }
+        .btn-civil {
+            background: linear-gradient(135deg, #10b981 0%, #047857 100%);
+            box-shadow: 0 4px 15px -3px rgba(16, 185, 129, 0.3);
+        }
+        .btn-marketing {
+            background: linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%);
+            box-shadow: 0 4px 15px -3px rgba(139, 92, 246, 0.3);
+        }
+
+        /* Icon Container Animations */
+        .icon-wrapper {
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 12px;
-            width: 100%;
-            max-width: 400px;
+            background: rgba(255, 255, 255, 0.15);
+            padding: 10px;
+            border-radius: 12px;
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
         }
-
-        /* Hover Animations */
-        .btn-pro:hover {
-            transform: translateY(-4px) scale(1.02);
-            box-shadow: 0 15px 30px -5px rgba(0, 0, 0, 0.15), 0 8px 10px -5px rgba(0, 0, 0, 0.1);
-        }
-
-        .btn-pro:active {
-            transform: translateY(1px) scale(0.98);
-            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
-        }
-
-        /* Specific Button Gradients */
-        .btn-academy {
-            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
-            box-shadow: 0 4px 14px 0 rgba(37, 99, 235, 0.39);
-        }
-        
-        .btn-civil {
-            background: linear-gradient(135deg, #059669 0%, #047857 100%);
-            box-shadow: 0 4px 14px 0 rgba(5, 150, 105, 0.39);
-        }
-
-        .btn-marketing {
-            background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
-            box-shadow: 0 4px 14px 0 rgba(124, 58, 237, 0.39);
-        }
-
-        /* SVG Icon Transition */
-        .btn-pro svg {
-            transition: transform 0.3s ease;
-        }
-        .btn-pro:hover svg {
+        .btn-pro:hover .icon-wrapper {
             transform: scale(1.15) rotate(-5deg);
+            background: rgba(255, 255, 255, 0.3);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
 
-        /* Ripple Effect Styles */
+        /* Ripple Effect */
         .ripple {
             position: absolute;
             border-radius: 50%;
             transform: scale(0);
-            animation: ripple-animation 600ms linear;
-            background-color: rgba(255, 255, 255, 0.4);
-            pointer-events: none; /* Ensure clicks pass through */
+            animation: ripple-animation 600ms cubic-bezier(0.4, 0, 0.2, 1);
+            background-color: rgba(255, 255, 255, 0.35);
+            pointer-events: none;
         }
-
         @keyframes ripple-animation {
             to {
                 transform: scale(4);
@@ -81,84 +130,77 @@
         }
     </style>
 </head>
-<body class="min-h-screen flex flex-col items-center justify-center p-6 text-slate-800">
+<body class="min-h-screen flex flex-col items-center justify-center p-4 sm:p-6 relative overflow-hidden">
 
-    <main class="w-full max-w-md bg-white rounded-2xl shadow-xl p-8 border border-gray-100 backdrop-blur-sm bg-white/90">
-        
-        <div class="text-center mb-8">
-            <h1 class="text-2xl font-bold text-gray-800 tracking-tight">Click on one</h1>
-            <p class="text-sm text-gray-500 mt-2">Choose a department to proceed</p>
-        </div>
+    <!-- Ambient Background Blobs -->
+    <div class="blob bg-blue-300 w-72 h-72 top-[-10%] left-[-5%]"></div>
+    <div class="blob bg-emerald-300 w-80 h-80 bottom-[-10%] right-[-5%]" style="animation-delay: -3s; animation-duration: 15s;"></div>
+    <div class="blob bg-purple-300 w-64 h-64 top-[40%] left-[50%] -translate-x-1/2" style="animation-delay: -6s; animation-duration: 10s;"></div>
 
-        <div class="flex flex-col gap-5">
+    <!-- Main Card Container (Staggered Entrance) -->
+    <main class="relative z-10 w-full max-w-[420px] bg-white/70 backdrop-blur-xl rounded-[2rem] shadow-[0_8px_30px_rgb(0,0,0,0.08)] border border-white p-8 sm:p-10 animate-fade-up">
+       
+        <div class="text-center mb-10 animate-fade-up delay-100">
+    
+    <!-- 1. IMAGE ADDED HERE -->
+    <!-- Replace "YOUR_IMAGE_URL.jpg" with your actual image link -->
+    <img src="/white_background.jpg" alt="KC97org Logo" class="w-20 h-20 mx-auto rounded-2xl object-cover shadow-md mb-4 border-2 border-white">
+
+    <!-- 2. COLOR CHANGED HERE (bg-indigo-600) -->
+    <!-- You can change 'bg-indigo-600' to 'bg-blue-500', 'bg-[#ff5733]', etc. -->
+    <div class="inline-flex items-center justify-center h-12 px-5 rounded-xl bg-yellow-400 text-green-800 font-bold text-xl mb-5 shadow-lg transition-transform hover:scale-110 duration-500 cursor-default">
+        KC97org
+    </div>
+    
+    <h1 class="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">Select Division</h1>
+    <p class="text-sm text-slate-500 mt-2 font-medium">Choose a professional department to proceed</p>
+</div>
+
+        <div class="flex flex-col gap-4">
+            
             <!-- Button 1: Academy -->
-            <a href="/Academy/academy-website" target="_blank" rel="noopener noreferrer" class="btn-pro btn-academy text-white px-6 py-4 rounded-xl text-lg font-semibold cursor-pointer">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 14l9-5-9-5-9 5 9 5z" />
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z" />
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 14v6m-3-2.818l-3.222 3.222M15 18.182l3.222 3.222" />
-                </svg>
-                KC97org KC97 Academy
+            <a href="/Academy/academy-website" target="_blank" rel="noopener noreferrer" class="btn-pro btn-academy text-white px-5 py-3.5 rounded-2xl text-[1.05rem] font-semibold cursor-pointer group animate-fade-up delay-200">
+                <div class="icon-wrapper">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 14l9-5-9-5-9 5 9 5z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 14v6m-3-2.818l-3.222 3.222M15 18.182l3.222 3.222" />
+                    </svg>
+                </div>
+                <span class="tracking-wide">KC97org KC97 Academy</span>
             </a>
 
             <!-- Button 2: Civil Services -->
-            <a href="/Civil_Services_Website/civil-engineering-website" target="_blank" rel="noopener noreferrer" class="btn-pro btn-civil text-white px-6 py-4 rounded-xl text-lg font-semibold cursor-pointer">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                    <!-- Dome of the hard hat -->
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 14c0-3.31 2.69-6 6-6s6 2.69 6 6" />
-                    <!-- Brim -->
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M4 14h16c1.1 0 2 .9 2 2v0a2 2 0 01-2 2H4a2 2 0 01-2-2v0c0-1.1.9-2 2-2z" />
-                    <!-- Ridge on top -->
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M10 8V6a2 2 0 014 0v2" />
-                </svg>
-                KC97org KC97 Civil Services
+            <a href="/Civil_Services_Website/civil-engineering-website" target="_blank" rel="noopener noreferrer" class="btn-pro btn-civil text-white px-5 py-3.5 rounded-2xl text-[1.05rem] font-semibold cursor-pointer group animate-fade-up delay-300">
+                <div class="icon-wrapper">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 14c0-3.31 2.69-6 6-6s6 2.69 6 6" />
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M4 14h16c1.1 0 2 .9 2 2v0a2 2 0 01-2 2H4a2 2 0 01-2-2v0c0-1.1.9-2 2-2z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M10 8V6a2 2 0 014 0v2" />
+                    </svg>
+                </div>
+                <span class="tracking-wide">KC97org KC97 Civil Services</span>
             </a>
 
             <!-- Button 3: Marketing -->
-            <a href="/Marketing_Website/marketing-website" target="_blank" rel="noopener noreferrer" class="btn-pro btn-marketing text-white px-6 py-4 rounded-xl text-lg font-semibold cursor-pointer">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z" />
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z" />
-                </svg>
-                KC97org KC97 Marketing
+            <a href="/Marketing_Website/marketing-website" target="_blank" rel="noopener noreferrer" class="btn-pro btn-marketing text-white px-5 py-3.5 rounded-2xl text-[1.05rem] font-semibold cursor-pointer group animate-fade-up delay-400">
+                <div class="icon-wrapper">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z" />
+                    </svg>
+                </div>
+                <span class="tracking-wide">KC97org KC97 Marketing</span>
             </a>
+            
         </div>
     </main>
 
     <script>
-        // Select all buttons with the 'btn-pro' class
         const buttons = document.querySelectorAll('.btn-pro');
 
         buttons.forEach(button => {
             button.addEventListener('click', function (e) {
-                // Get bounding rectangle to calculate exact position relative to button
                 const rect = button.getBoundingClientRect();
                 
-                // Calculate click coordinates relative to the button
-                const x = e.clientX - rect.left;
-                const y = e.clientY - rect.top;
-
-                // Create the ripple span element
-                const ripple = document.createElement('span');
-                ripple.classList.add('ripple');
-                
-                // Set the size of the ripple to be large enough to cover the button
-                const diameter = Math.max(button.clientWidth, button.clientHeight);
-                const radius = diameter / 2;
-                
-                ripple.style.width = ripple.style.height = `${diameter}px`;
-                ripple.style.left = `${x - radius}px`;
-                ripple.style.top = `${y - radius}px`;
-
-                // Append ripple to button
-                this.appendChild(ripple);
-
-                // Remove the ripple element after the animation completes (600ms)
-                setTimeout(() => {
-                    ripple.remove();
-                }, 600);
-            });
-        });
-    </script>
-</body>
-</html>
+                const x = e.clientX - rect.left
